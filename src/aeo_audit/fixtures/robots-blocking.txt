@@ -1,0 +1,10 @@
+# Block AI search and answer crawlers, allow everyone else.
+User-agent: OAI-SearchBot
+User-agent: PerplexityBot
+Disallow: /
+
+User-agent: GPTBot
+Disallow: /guides/
+
+User-agent: *
+Disallow: /cart/
