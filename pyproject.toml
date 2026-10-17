@@ -1,0 +1,68 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "aeo-audit"
+version = "0.1.0"
+description = "Audit how well a web page is set up to be found, fetched and quoted by AI answer engines: robots.txt per crawler, structured data, answer-ready structure, authorship, freshness. Zero dependencies."
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Nadimul Haque" }]
+classifiers = [
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Typing :: Typed",
+]
+dependencies = []
+
+[project.scripts]
+aeo-audit = "aeo_audit.cli:main"
+
+[dependency-groups]
+dev = [
+    "hypothesis>=6.169.0",
+    "mypy>=2.4.0",
+    "pytest>=9.1.1",
+    "ruff>=0.17.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/aeo_audit"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "N", "SIM", "RUF", "S", "PTH", "C4", "PL"]
+ignore = [
+    "PLR0913", # explicit keyword-only parameters read better than option bags here
+    "PLR2004", # small literal thresholds in scoring rules are clearer inline
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101", "S311", "S310", "S104", "S603", "S607", "PLR0915", "PLR0917", "PLC0415", "SIM117"]
+# The report and CLI use typographic dashes and arrows on purpose.
+"src/aeo_audit/report.py" = ["RUF001"]
+"src/aeo_audit/cli.py" = ["RUF001"]
+# Typographic apostrophes and en dashes are matched deliberately in real-world text.
+"src/aeo_audit/page.py" = ["RUF001"]
+"src/aeo_audit/signals/content.py" = ["RUF001"]
+"src/aeo_audit/signals/trust.py" = ["RUF001"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["aeo_audit"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+files = ["src/aeo_audit"]
+warn_unreachable = true
